@@ -21,12 +21,25 @@ Make Cozmo drive forwards and then turn 90 degrees to the left.
 '''
 
 import cozmo
+from time import sleep
+
 from cozmo.util import degrees, distance_mm, speed_mmps
+from cozmo.lights import Light, green_light, blue_light, red_light
+
 
 
 def cozmo_program(robot: cozmo.robot.Robot):
     # Drive forwards for 150 millimeters at 50 millimeters-per-second.
-    robot.drive_straight(distance_mm(300),speed_mmps(1000)).wait_for_completed()
+    action = robot.drive_straight(distance_mm(300),speed_mmps(1000), in_parallel= True)
+    while not robot.is_moving:
+        sleep(0.1)
+    while robot.is_moving:
+        robot.set_all_backpack_lights(green_light)
+        sleep(0.2)
+        robot.set_all_backpack_lights(blue_light)
+        sleep(0.2)
+        robot.set_all_backpack_lights(red_light)
+        sleep(0.2)
   #  robot.drive_straight(distance_mm(150), speed_mmps(50)).wait_for_completed()
     # Turn 90 degrees to the left.
     # Note: To turn to the right, just use a negative number.
